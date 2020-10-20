@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1603203109 source:c:\data-u\code\assignments\multimediaanalyse\task1\readbmptoyuv\main.cpp
+	<iostream>
+	<cstring>
+	<string.h>
+	"BMPStruct.h"
+
+1603203733 c:\data-u\code\assignments\multimediaanalyse\task1\readbmptoyuv\bmpstruct.h
+
+1603205794 source:c:\data-u\code\assignments\multimediaanalyse\task1\readbmptoyuv\bmpstruct.cpp
+	"BMPStruct.h"
+	<iostream>
+	<cstdio>
+	<string.h>
+
