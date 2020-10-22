@@ -42,9 +42,18 @@ typedef struct tagIMAGEDATA{
     BYTE blue;
 }IMAGEDATA;
 
+typedef struct tagBMPData{
+    WORD bfType;
+    BITMAPFILEHEADER strHead;
+    BITMAPINFOHEADER strInfo;
+    RGBQUAD strPla[256];
+    IMAGEDATA *imagedata;
+}BMPDATA;
+
 
 void showBMPHead(BITMAPFILEHEADER pBMPHead);
 void showBmpInfoHead(BITMAPINFOHEADER pBMPInfoHead);
-void ReadBMPFile(char *strFile);
+BMPDATA* ReadBMPFile(char *strFile);
+void RGB2YUV(char *strFile);
 
 #endif // BMPSTRUCT_H_INCLUDED

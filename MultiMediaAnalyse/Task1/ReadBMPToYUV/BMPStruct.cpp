@@ -1,21 +1,12 @@
 #include "BMPStruct.h"
 #include <iostream>
+#include <fstream>
 #include <cstdio>
 #include <string.h>
-#include <vector>
+#include <typeinfo>
 using namespace std;
 
-#define Wr 0.2627
-#define Wg 0.678
-#define Wb 0.0593
-#define Umax 0.5
-#define Vmax 0.5
-BITMAPFILEHEADER strHead;
-RGBQUAD strPla[256];//256 color planes
-BITMAPINFOHEADER strInfo;
-vector<vector<IMAGEDATA>> imagedata;
-IMAGEDATA** YUVimagedata = NULL;
-
+BMPDATA bmpdata;
 
 void showBMPHead(BITMAPFILEHEADER pBMPHead){
     cout<<"BMP HEAD: "<<endl;
@@ -39,76 +30,128 @@ void showBmpInfoHead(BITMAPINFOHEADER pBMPInfoHead){
     cout<<"使用的颜色数:"<<pBMPInfoHead.biClrUsed<<endl;
     cout<<"重要颜色数:"<<pBMPInfoHead.biClrImportant<<endl;
 }
-void debug(int a,FILE * file){
-    //cout<<a<<": "<<ftell(file)<<endl;
-    return;
-}
-void ReadBMPFile(char *strFile){
-    FILE *fpi, *fpw;
+
+BMPDATA* ReadBMPFile(char *strFile){
+    FILE *fpi;
     fpi = fopen(strFile,"rb");
     if(!fpi){
         cout<<"Open file error!"<<endl;
-        return ;
+        return NULL;
     }
-    WORD bfType;
-    fread(&bfType,1,sizeof(WORD),fpi);
-    debug(1,fpi);
-    if(0x4d42 != bfType){
+    fread(&bmpdata.bfType,1,sizeof(WORD),fpi);
+    if(0x4d42 != bmpdata.bfType){
         cout<<"the file is not a BMP file!"<<endl;
-        return ;
+        return NULL;
     }
     //read BMP head
-    fread(&strHead,1,sizeof(BITMAPFILEHEADER),fpi);
-    showBMPHead(strHead);
-    debug(2,fpi);
+    fread(&bmpdata.strHead,1,sizeof(BITMAPFILEHEADER),fpi);
+    showBMPHead(bmpdata.strHead);
     //read BMP info head
-    fread(&strInfo,1,sizeof(BITMAPINFOHEADER),fpi);
-    showBmpInfoHead(strInfo);
-    debug(3,fpi);
+    fread(&bmpdata.strInfo,1,sizeof(BITMAPINFOHEADER),fpi);
+    showBmpInfoHead(bmpdata.strInfo);
     //read color plane
-    for(int i = strHead.bfOffBits-54;i>0;i--){
-        BYTE s[1];
-        fread(s,1,sizeof(BYTE),fpi);
-    }
-    debug(4,fpi);
-    for(WORD i = 0;i < strInfo.biClrUsed;i++){
+    for(WORD i = 0;i < bmpdata.strInfo.biClrUsed;i++){
         //delete reserved words
-        fread((char *)&(strPla[i].rgbBlue),1,sizeof(BYTE),fpi);
-        fread((char *)&(strPla[i].rgbGreen),1,sizeof(BYTE),fpi);
-        fread((char *)&(strPla[i].rgbRed),1,sizeof(BYTE),fpi);
-        //fread((char *)&(strPla[i].rgbReserved),1,sizeof(BYTE),fpi);
+        fread((char *)&(bmpdata.strPla[i].rgbBlue),1,sizeof(BYTE),fpi);
+        fread((char *)&(bmpdata.strPla[i].rgbGreen),1,sizeof(BYTE),fpi);
+        fread((char *)&(bmpdata.strPla[i].rgbRed),1,sizeof(BYTE),fpi);
+        fread((char *)&(bmpdata.strPla[i].rgbReserved),1,sizeof(BYTE),fpi);
     }
-    debug(5,fpi);
     //read Data
-    LONG width = strInfo.biWidth;
-    LONG height = strInfo.biHeight;
-    IMAGEDATA RGBimagedata[width][height];
-    for(LONG i=0; i<width;i++){
-        for(LONG j=0;j<height;j++){
-            RGBimagedata[i][j].red=0;
-            RGBimagedata[i][j].green=0;
-            RGBimagedata[i][j].blue=0;
+    LONG width = bmpdata.strInfo.biWidth%4 == 0? bmpdata.strInfo.biWidth : bmpdata.strInfo.biWidth+4-(bmpdata.strInfo.biWidth%4);
+    LONG height = bmpdata.strInfo.biHeight;
+    bmpdata.strHead.bfSize = width * height * bmpdata.strInfo.biBitCount /8;
+
+    bmpdata.imagedata = new IMAGEDATA [width * height];
+
+    for(LONG i=0; i<width*height;i++){
+        bmpdata.imagedata[i].red=0;
+        bmpdata.imagedata[i].green=0;
+        bmpdata.imagedata[i].blue=0;
+    }
+    //IMAGEDATA imagedata[height][width];
+    //memset(imagedata,0,sizeof(imagedata));
+    //cout<<"read imagedata"<<endl;
+    fread(bmpdata.imagedata,sizeof(IMAGEDATA)*width,height,fpi);
+    ofstream outfile;
+    outfile.open("imagedata1.txt", ios::out | ios::trunc );
+    for(LONG i=0;i<bmpdata.strInfo.biWidth * bmpdata.strInfo.biHeight;i++){
+        outfile<<WORD(bmpdata.imagedata[i].red)<<"-"<<WORD(bmpdata.imagedata[i].green)<<"-"<<WORD(bmpdata.imagedata[i].blue)<<" ";
+        if((i+1)%width == 0 && i!=0){
+            outfile<<endl<<endl;
+        }
+    }outfile.close();
+    /*
+    cout<<"read success!"<<endl;
+    for(LONG i = 0,k=0;k<bmpdata.strInfo.biHeight*bmpdata.strInfo.biWidth && i<bmpdata.strInfo.biHeight;i++){
+        for(LONG j=0;k<bmpdata.strInfo.biHeight*bmpdata.strInfo.biWidth && j<bmpdata.strInfo.biWidth;j++,k++){
+            imagedata[i][j].blue = bmpdata.imagedata[k].blue;
+            imagedata[i][j].green = bmpdata.imagedata[k].green;
+            imagedata[i][j].red = bmpdata.imagedata[k].red;
         }
     }
-    fread(RGBimagedata,sizeof(IMAGEDATA)*width,height,fpi);
-    debug(6,fpi);
-    fclose(fpi);
-//    for(LONG i=0; i<1;i++){
-//        for(LONG j=0;j<height;j++){
-//            cout<<WORD(RGBimagedata[i][j].red)<<" ";
-//        }
-//        cout<<endl;
-//    }
-
-    for(LONG i=0; i<width; i++){
-        for(LONG j=0;j<height; j++){
-            BYTE red = RGBimagedata[i][j].red;
-            BYTE green = RGBimagedata[i][j].green;
-            BYTE blue = RGBimagedata[i][j].blue;
-            RGBimagedata[i][j].red = (BYTE)(0.2990 * red + 0.5870 * green + 0.1140 * blue + 0);
-            RGBimagedata[i][j].green = (BYTE)(-0.1687 * red - 0.3313 * green + 0.5000 * blue + 128);
-            RGBimagedata[i][j].blue = (BYTE)(0.5000 * red - 0.4187 * green - 0.0813 * blue + 128);
+    outfile.open("imagedata2.txt", ios::out | ios::trunc );
+    for(LONG i=0;i<height;i++){
+        for(LONG j=0;j<width;j++){
+             outfile<<WORD(imagedata[i][j].red)<<"-"<<WORD(imagedata[i][j].green)<<"-"<<WORD(imagedata[i][j].blue)<<" ";
         }
+        outfile<<endl<<endl;
+    }
+    outfile.close();
+    //cout<<endl;
+//    for(LONG i = 0;i<width;i++){
+//        for(LONG j = 0; j<height;j++){
+//            if(i>=bmpdata.strInfo.biWidth || j>=bmpdata.strInfo.biHeight){
+//                cout<<i<<" "<<j<<":"<<WORD(imagedata[i][j].red)<<endl;
+//            }
+//        }
+//    }
+    for(LONG i=0; i<width*height;i++){
+        bmpdata.imagedata[i].red=0;
+        bmpdata.imagedata[i].green=0;
+        bmpdata.imagedata[i].blue=0;
+    }
+    for(LONG i = 0;i<height;i++){
+        for(LONG j=0;j<width;j++){
+            bmpdata.imagedata[i*width+j].blue = imagedata[i][j].blue;
+            bmpdata.imagedata[i*width+j].green = imagedata[i][j].green;
+            bmpdata.imagedata[i*width+j].red = imagedata[i][j].red;
+        }
+    }
+    outfile.open("bmpimagedata.txt", ios::out | ios::trunc );
+    for(LONG i=0;i<width * height;i++){
+        outfile<<WORD(bmpdata.imagedata[i].red)<<"-"<<WORD(bmpdata.imagedata[i].green)<<"-"<<WORD(bmpdata.imagedata[i].blue)<<" ";
+        if((i+1)%width == 0 && i!=0){
+            outfile<<endl<<endl;
+        }
+    }outfile.close();*/
+//    for(LONG i = 0;i<width;i++){
+//        for(LONG j = 0; j<height;j++){
+//            if(i>=bmpdata.strInfo.biWidth || j>=bmpdata.strInfo.biHeight){
+//                cout<<i<<" "<<j<<":"<<WORD(bmpdata.imagedata[i*width+j].red)<<endl;
+//            }
+//        }
+//    }
+//    for(int i=0;i<height;i++){
+//        cout<<WORD(bmpdata.imagedata[i].red)<<" "<<WORD(bmpdata.imagedata[i].green)<<" "<<endl;
+//    }
+//    cout<<"flexed"<<endl;
+    //bmpdata.strInfo.biWidth=width;
+    fclose(fpi);
+    return &bmpdata;
+}
+
+void RGB2YUV(char *strFile){
+    FILE *fpw;
+    BMPDATA *bmpdata = ReadBMPFile(strFile);//read bmp file;
+    for(LONG i=0; i<bmpdata->strInfo.biWidth * bmpdata->strInfo.biHeight; i++){
+        //cout<<i<<" ";
+        BYTE red = bmpdata->imagedata[i].red;
+        BYTE green = bmpdata->imagedata[i].green;
+        BYTE blue = bmpdata->imagedata[i].blue;
+        bmpdata->imagedata[i].red = (BYTE)(0.299 * red + 0.587 * green + 0.114 * blue);
+        bmpdata->imagedata[i].green = (BYTE)(-0.148 * red - 0.289 * green + 0.437 * blue);
+        bmpdata->imagedata[i].blue = (BYTE)(0.615 * red - 0.515 * green - 0.100 * blue);
     }
     // Save file
     char newfile[40]="new_";
@@ -122,21 +165,18 @@ void ReadBMPFile(char *strFile){
         cout<<"Create file error!"<<endl;
         return ;
     }
-    fwrite(&bfType,1,sizeof(WORD),fpw);
-    debug(11,fpw);
-    fwrite(&strHead,1,sizeof(BITMAPFILEHEADER),fpw);
-    debug(12,fpw);
-    fwrite(&strInfo,1,sizeof(BITMAPINFOHEADER),fpw);
-    debug(13,fpw);
-    for(DWORD i = 0;i < strInfo.biClrUsed;i++){
-        fwrite((char *)&(strPla[i].rgbBlue),1,sizeof(BYTE),fpw);
-        fwrite((char *)&(strPla[i].rgbGreen),1,sizeof(BYTE),fpw);
-        fwrite((char *)&(strPla[i].rgbRed),1,sizeof(BYTE),fpw);
-        //fwrite((char *)&(strPla[i].rgbReserved),1,sizeof(BYTE),fpw);
+    fwrite(&bmpdata->bfType,1,sizeof(WORD),fpw);
+    fwrite(&bmpdata->strHead,1,sizeof(BITMAPFILEHEADER),fpw);
+    fwrite(&bmpdata->strInfo,1,sizeof(BITMAPINFOHEADER),fpw);
+    for(DWORD i = 0;i < bmpdata->strInfo.biClrUsed;i++){
+        fwrite((char *)&(bmpdata->strPla[i].rgbBlue),1,sizeof(BYTE),fpw);
+        fwrite((char *)&(bmpdata->strPla[i].rgbGreen),1,sizeof(BYTE),fpw);
+        fwrite((char *)&(bmpdata->strPla[i].rgbRed),1,sizeof(BYTE),fpw);
+        //fwrite((char *)&(bmpdata->strPla[i].rgbReserved),1,sizeof(BYTE),fpw);
     }
-    debug(14,fpw);
-    fwrite(RGBimagedata,sizeof(IMAGEDATA)*width,height,fpw);
-    debug(15,fpw);
+    LONG width = bmpdata->strInfo.biWidth%4 == 0? bmpdata->strInfo.biWidth : bmpdata->strInfo.biWidth+4-(bmpdata->strInfo.biWidth%4);
+    LONG height = bmpdata->strInfo.biHeight;
+    fwrite(bmpdata->imagedata,sizeof(IMAGEDATA)*width,height,fpw);
     fclose(fpw);
     return ;
 }

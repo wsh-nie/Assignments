@@ -11,7 +11,7 @@ int main()
         cout<<"Enter file name: "<<endl;
         char strFile[20];
         cin>>strFile;
-        ReadBMPFile(strFile);
+        RGB2YUV(strFile);
     }
     return 0;
 }
