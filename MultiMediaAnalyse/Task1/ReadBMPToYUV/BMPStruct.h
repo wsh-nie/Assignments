@@ -37,23 +37,21 @@ typedef struct tagRGBQUAD{
 }RGBQUAD;
 
 typedef struct tagIMAGEDATA{
-    BYTE red;
-    BYTE green;
     BYTE blue;
+    BYTE green;
+    BYTE red;
 }IMAGEDATA;
 
 typedef struct tagBMPData{
-    WORD bfType;
-    BITMAPFILEHEADER strHead;
-    BITMAPINFOHEADER strInfo;
-    RGBQUAD strPla[256];
-    IMAGEDATA *imagedata;
+    LONG width;
+    LONG height;
+    IMAGEDATA **imagedata;
 }BMPDATA;
 
 
 void showBMPHead(BITMAPFILEHEADER pBMPHead);
 void showBmpInfoHead(BITMAPINFOHEADER pBMPInfoHead);
-BMPDATA* ReadBMPFile(char *strFile);
+BMPDATA ReadBMPFileImageData(char *strFile);
 void RGB2YUV(char *strFile);
 
 #endif // BMPSTRUCT_H_INCLUDED
