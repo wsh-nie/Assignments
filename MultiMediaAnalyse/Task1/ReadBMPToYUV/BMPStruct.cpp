@@ -10,25 +10,25 @@ BMPDATA bmpdata;
 
 void showBMPHead(BITMAPFILEHEADER pBMPHead){
     cout<<"BMP HEAD: "<<endl;
-    //cout<<"ÎÄ¼þÀàÐÍ"<<pBMPHead.bfType<<endl;
-    cout<<"ÎÄ¼þ´óÐ¡:"<<pBMPHead.bfSize<<endl;
-    cout<<"±£Áô×Ö_1:"<<pBMPHead.bfReserved1<<endl;
-    cout<<"±£Áô×Ö_2:"<<pBMPHead.bfReserved2<<endl;
-    cout<<"Êµ¼ÊÎ»Í¼Êý¾ÝµÄÆ«ÒÆ×Ö½ÚÊý:"<<pBMPHead.bfOffBits<<endl<<endl;
+    //cout<<"ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½"<<pBMPHead.bfType<<endl;
+    cout<<"ï¿½Ä¼ï¿½ï¿½ï¿½Ð¡:"<<pBMPHead.bfSize<<endl;
+    cout<<"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_1:"<<pBMPHead.bfReserved1<<endl;
+    cout<<"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_2:"<<pBMPHead.bfReserved2<<endl;
+    cout<<"Êµï¿½ï¿½Î»Í¼ï¿½ï¿½ï¿½Ýµï¿½Æ«ï¿½ï¿½ï¿½Ö½ï¿½ï¿½ï¿½:"<<pBMPHead.bfOffBits<<endl<<endl;
 }
 void showBmpInfoHead(BITMAPINFOHEADER pBMPInfoHead){
     cout<<"BMP INFO HEAD:"<<endl;
-    cout<<"½á¹¹ÌåµÄ³¤¶È:"<<pBMPInfoHead.biSize<<endl;
-    cout<<"Î»Í¼¿í:"<<pBMPInfoHead.biWidth<<endl;
-    cout<<"Î»Í¼¸ß:"<<pBMPInfoHead.biHeight<<endl;
-    cout<<"biPlanesÆ½ÃæÊý:"<<pBMPInfoHead.biPlanes<<endl;
-    cout<<"biBitCount²ÉÓÃÑÕÉ«Î»Êý:"<<pBMPInfoHead.biBitCount<<endl;
-    cout<<"Ñ¹Ëõ·½Ê½:"<<pBMPInfoHead.biCompression<<endl;
-    cout<<"biSizeImageÊµ¼ÊÎ»Í¼Êý¾ÝÕ¼ÓÃµÄ×Ö½ÚÊý:"<<pBMPInfoHead.biSizeImage<<endl;
-    cout<<"X·½Ïò·Ö±æÂÊ:"<<pBMPInfoHead.biXPelsPerMeter<<endl;
-    cout<<"Y·½Ïò·Ö±æÂÊ:"<<pBMPInfoHead.biYPelsPerMeter<<endl;
-    cout<<"Ê¹ÓÃµÄÑÕÉ«Êý:"<<pBMPInfoHead.biClrUsed<<endl;
-    cout<<"ÖØÒªÑÕÉ«Êý:"<<pBMPInfoHead.biClrImportant<<endl;
+    cout<<"ï¿½á¹¹ï¿½ï¿½Ä³ï¿½ï¿½ï¿½:"<<pBMPInfoHead.biSize<<endl;
+    cout<<"Î»Í¼ï¿½ï¿½:"<<pBMPInfoHead.biWidth<<endl;
+    cout<<"Î»Í¼ï¿½ï¿½:"<<pBMPInfoHead.biHeight<<endl;
+    cout<<"biPlanesÆ½ï¿½ï¿½ï¿½ï¿½:"<<pBMPInfoHead.biPlanes<<endl;
+    cout<<"biBitCountï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«Î»ï¿½ï¿½:"<<pBMPInfoHead.biBitCount<<endl;
+    cout<<"Ñ¹ï¿½ï¿½ï¿½ï¿½Ê½:"<<pBMPInfoHead.biCompression<<endl;
+    cout<<"biSizeImageÊµï¿½ï¿½Î»Í¼ï¿½ï¿½ï¿½ï¿½Õ¼ï¿½Ãµï¿½ï¿½Ö½ï¿½ï¿½ï¿½:"<<pBMPInfoHead.biSizeImage<<endl;
+    cout<<"Xï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½:"<<pBMPInfoHead.biXPelsPerMeter<<endl;
+    cout<<"Yï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½:"<<pBMPInfoHead.biYPelsPerMeter<<endl;
+    cout<<"Ê¹ï¿½Ãµï¿½ï¿½ï¿½É«ï¿½ï¿½:"<<pBMPInfoHead.biClrUsed<<endl;
+    cout<<"ï¿½ï¿½Òªï¿½ï¿½É«ï¿½ï¿½:"<<pBMPInfoHead.biClrImportant<<endl;
 }
 
 BMPDATA ReadBMPFileImageData(char *strFile){
@@ -65,7 +65,7 @@ BMPDATA ReadBMPFileImageData(char *strFile){
         fread((char *)&(strPla[i].rgbRed),1,sizeof(BYTE),fpi);
         fread((char *)&(strPla[i].rgbReserved),1,sizeof(BYTE),fpi);
     }
-    LONG width = strInfo.biWidth%4 == 0? strInfo.biWidth : strInfo.biWidth+4-(strInfo.biWidth%4);
+    LONG width = (strInfo.biWidth+3)/4*4;
     LONG height = strInfo.biHeight;
     // create return data
     bmpdata.height = height;
@@ -82,22 +82,23 @@ BMPDATA ReadBMPFileImageData(char *strFile){
         }
     }
     //read image data
-    IMAGEDATA imagedata[width * height];
-    for(LONG i=0; i<width*height;i++){
-        imagedata[i].red=0;
-        imagedata[i].green=0;
-        imagedata[i].blue=0;
-    }
-    fread(imagedata,sizeof(IMAGEDATA)*width,height,fpi);
-    //turn imagedata to bmpdata.imagedata and fill zeros
-    for(LONG i = 0,k=0;k<height*strInfo.biWidth && i<height;i++){
-        for(LONG j=0;k<height*strInfo.biWidth && j<strInfo.biWidth;j++,k++){
-            bmpdata.imagedata[i][j].blue = imagedata[k].blue;
-            bmpdata.imagedata[i][j].green = imagedata[k].green;
-            bmpdata.imagedata[i][j].red = imagedata[k].red;
+    IMAGEDATA imagedata[width];
+    LONG k=0;
+    for(LONG i=height;i>=0;){
+        fread(imagedata,sizeof(IMAGEDATA),width,fpi);
+        for(LONG j = 0;j<width;j++){
+            k++;
+            if((k-1)%bmpdata.width == 0){
+                i--;
+                if(i<0){
+                    break;
+                }
+            }
+            bmpdata.imagedata[i][(k-1)%bmpdata.width].blue = imagedata[j].blue;
+            bmpdata.imagedata[i][(k-1)%bmpdata.width].green = imagedata[j].green;
+            bmpdata.imagedata[i][(k-1)%bmpdata.width].red = imagedata[j].red;
         }
     }
-
     fclose(fpi);
     return bmpdata;
 }
@@ -147,9 +148,9 @@ void RGB2YUV(char *strFile){
         cout<<"Create file error!"<<endl;
         return ;
     }
-    fwrite(y_data,sizeof(BYTE)*width,height,fpw);
-    fwrite(u_data,sizeof(BYTE)*(width/4),height,fpw);
-    fwrite(v_data,sizeof(BYTE)*(width/4),height,fpw);
+    fwrite(y_data,sizeof(BYTE),height*width,fpw);
+    fwrite(u_data,sizeof(BYTE),height*width/4,fpw);
+    fwrite(v_data,sizeof(BYTE),width*height/4,fpw);
     fclose(fpw);
     return ;
 }
