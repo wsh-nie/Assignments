@@ -10,25 +10,25 @@ BMPDATA bmpdata;
 
 void showBMPHead(BITMAPFILEHEADER pBMPHead){
     cout<<"BMP HEAD: "<<endl;
-    //cout<<"�ļ�����"<<pBMPHead.bfType<<endl;
-    cout<<"�ļ���С:"<<pBMPHead.bfSize<<endl;
-    cout<<"������_1:"<<pBMPHead.bfReserved1<<endl;
-    cout<<"������_2:"<<pBMPHead.bfReserved2<<endl;
-    cout<<"ʵ��λͼ���ݵ�ƫ���ֽ���:"<<pBMPHead.bfOffBits<<endl<<endl;
+    //cout<<"Type of BMP file"<<pBMPHead.bfType<<endl;
+    cout<<"Size of BMP file:"<<pBMPHead.bfSize<<endl;
+    cout<<"Reserved Word 1:"<<pBMPHead.bfReserved1<<endl;
+    cout<<"Reserved Word 2:"<<pBMPHead.bfReserved2<<endl;
+    cout<<"Off bits:"<<pBMPHead.bfOffBits<<endl<<endl;
 }
 void showBmpInfoHead(BITMAPINFOHEADER pBMPInfoHead){
     cout<<"BMP INFO HEAD:"<<endl;
-    cout<<"�ṹ��ĳ���:"<<pBMPInfoHead.biSize<<endl;
-    cout<<"λͼ��:"<<pBMPInfoHead.biWidth<<endl;
-    cout<<"λͼ��:"<<pBMPInfoHead.biHeight<<endl;
-    cout<<"biPlanesƽ����:"<<pBMPInfoHead.biPlanes<<endl;
-    cout<<"biBitCount������ɫλ��:"<<pBMPInfoHead.biBitCount<<endl;
-    cout<<"ѹ����ʽ:"<<pBMPInfoHead.biCompression<<endl;
-    cout<<"biSizeImageʵ��λͼ����ռ�õ��ֽ���:"<<pBMPInfoHead.biSizeImage<<endl;
-    cout<<"X����ֱ���:"<<pBMPInfoHead.biXPelsPerMeter<<endl;
-    cout<<"Y����ֱ���:"<<pBMPInfoHead.biYPelsPerMeter<<endl;
-    cout<<"ʹ�õ���ɫ��:"<<pBMPInfoHead.biClrUsed<<endl;
-    cout<<"��Ҫ��ɫ��:"<<pBMPInfoHead.biClrImportant<<endl;
+    cout<<"Size of BMP information head:"<<pBMPInfoHead.biSize<<endl;
+    cout<<"Width of file"<<pBMPInfoHead.biWidth<<endl;
+    cout<<"Height of file:"<<pBMPInfoHead.biHeight<<endl;
+    cout<<"Plans of file:"<<pBMPInfoHead.biPlanes<<endl;
+    cout<<"BitCount of file:"<<pBMPInfoHead.biBitCount<<endl;
+    cout<<"Type of Compression:"<<pBMPInfoHead.biCompression<<endl;
+    cout<<"Size of ImageData:"<<pBMPInfoHead.biSizeImage<<endl;
+    cout<<"XPels:"<<pBMPInfoHead.biXPelsPerMeter<<endl;
+    cout<<"YPels:"<<pBMPInfoHead.biYPelsPerMeter<<endl;
+    cout<<"ʹClrUsed:"<<pBMPInfoHead.biClrUsed<<endl;
+    cout<<"ClrImportant:"<<pBMPInfoHead.biClrImportant<<endl;
 }
 
 BMPDATA ReadBMPFileImageData(char *strFile){
