@@ -5,7 +5,7 @@ fig_get = min(fig_ed,fig);% 初始化为开启操作保留的长串结构
 
 for i = 1:30 %迭代
     fig_get  = My_dilation(fig_get,E); % 膨胀操作
-    fig_get = min(fig_get,fig);% 使用原图进行限制
+    fig_get = min(fig_get,fig);% 与原图进行交运算
 end
 end
 

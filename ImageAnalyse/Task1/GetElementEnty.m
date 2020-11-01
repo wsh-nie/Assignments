@@ -7,7 +7,7 @@ for i = -R:1:R
         if(i^2 + j^2 <= R^2)
             E(i+R+1,j+R+1) = 1;
         else
-            E(i+R+1,j+R+1) = 1;
+            E(i+R+1,j+R+1) = 0;
         end
     end
 end

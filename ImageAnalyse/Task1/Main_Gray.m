@@ -1,4 +1,5 @@
 clear;clc;
+%{
 fig2 = imread("Fig2.tif");
 fig_g = im2bw(fig2,0.53);
 
@@ -24,7 +25,7 @@ subplot(222); imshow(fig_g); title('二值图像'); axis on;
 subplot(234); imshow(fig_ed); title('开操作图像'); axis on;
 subplot(235); imshow(fig_t_hat); title('顶帽图像'); axis on;
 subplot(236); imshow(fig_g2); title('减开操作之后的二值图像'); axis on;
-%{
+
 fig3 = imread("Fig3.tif");
 [fig_5,fig_10,fig_20,fig_25,fig_30,y] = Detect(fig3);
 figure;
@@ -39,4 +40,12 @@ x=1:1:35;%x轴上的数据，第一个值代表数据开始，第二个值代表
 plot(x,y,'-*b'); %线性，颜色，标记
 ylabel('表面区域差')  %x轴坐标描述
 xlabel('圆盘半径') %y轴坐标描述
+
 %}
+fig4 = imread("Fig4.tif");
+[fig4_ed,fig4_deed,fig_side] = Gradiant(fig4);
+figure;
+subplot(221); imshow(fig4); title('图像'); axis on
+subplot(222); imshow(fig4_ed); title('大斑点图像'); axis on
+subplot(223); imshow(fig4_deed); title('边界图像'); axis on
+subplot(224); imshow(fig_side); title('边界+原图像'); axis on
