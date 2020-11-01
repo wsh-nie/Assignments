@@ -1,9 +1,8 @@
 fig = imread("Fig2.tif");
-fig_g = im2bw(fig,0.53);
-imshow(fig_g);
+fig_g = im2bw(fig,0.5);
 
 %% 顶帽变换
-%初始化结构元素
+%生成结构元素
 E = zeros(40,40);
 for i = -40:1:40
     for j = -40:1:40
@@ -14,7 +13,13 @@ for i = -40:1:40
         end
     end
 end
-
-fig_t_hat = T_hat(fig_g,E);
-fig_t_hat = uint8(255 * mat2gray(fig_t_hat));
-figure,imshow(fig_t_hat);
+[fig_ed,fig_t_hat] = T_hat(fig,E);
+fig_ed = uint8(fig_ed);
+fig_t_hat = uint8(fig_t_hat);
+fig_g2 = im2bw(fig_t_hat,0.2);
+figure;
+subplot(221); imshow(fig); title('原图'); axis on;
+subplot(222); imshow(fig_g); title('阈值图像'); axis on;
+subplot(234); imshow(fig_ed); title('开操作图像'); axis on;
+subplot(235); imshow(fig_t_hat); title('顶帽图像'); axis on;
+subplot(236); imshow(fig_g2); title('阈值图像'); axis on;
