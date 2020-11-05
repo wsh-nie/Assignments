@@ -49,7 +49,9 @@ if __name__ == '__main__':
     img3 = SIFT(imgname1, imgname2)
     img4 = ORB(imgname1, imgname2)
     cv2.imshow("SIFT", img3)
+    cv2.imwrite("sift.jpg",img3)
     cv2.imshow("ORB", img4)
+    cv2.imwrite("orb.jpg",img4)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
