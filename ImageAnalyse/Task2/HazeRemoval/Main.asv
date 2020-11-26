@@ -1,0 +1,20 @@
+clear;
+clc;
+
+% read image
+img = imread("test images/haze1.jpg");
+figure;
+subplot(221);imshow(img);title("Haze image");axis on;
+
+dark = GetDark(img);
+subplot(222);imshow(dark);title("Dark Channel");axis on;
+
+airlightimg = GetAirlight(img,dark);
+subplot(223);imshow(airlightimg);title("Air Light");axis on;
+
+t_hat = GetT_hat(img,airlightimg);
+
+t = GetT(img,t_hat);
+
+imgRemovalHaze = GetImg(img,airlightimg,t_hat);
+subplot(224);imshow(airlightimg);title("Air Light");axis on;
