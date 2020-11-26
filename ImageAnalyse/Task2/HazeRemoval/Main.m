@@ -13,7 +13,7 @@ airlightimg = GetAirlight(img,dark);
 subplot(323);imshow(airlightimg);title("Air Light");axis on;
 
 t_hat = GetT_hat(img,airlightimg);
-subplot(324);imshow(t_hat);title("T_hat");axis on;
+subplot(324);imshow(t_hat);title("T hat");axis on;
 t = GetT(img,t_hat);
 subplot(325);imshow(t);title("T");axis on;
 

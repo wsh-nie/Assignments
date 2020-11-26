@@ -1,6 +1,7 @@
 function dark = GetDark(img)
 %GETDARK Get Dark Channel
 %   此处显示详细说明
+
 B = img(:,:,1);
 G = img(:,:,2);
 R = img(:,:,3);
@@ -13,7 +14,6 @@ for i = 1:M
     end
 end
 
-% Omega(X) size is 3*3
 for i = 1:M
     for j = 1:N
         minNum = minRGB(i,j);
@@ -21,27 +21,15 @@ for i = 1:M
             minNum = min(minNum,minRGB(i-1,j-1));
         end
         if and(and(1<= i+1,i+1<=M),and(1<=j+1,j+1<= N))
-            minNum = min(minNum,minRGB(i+1,j+1));
+            minNum = min(minNum,minRGB(i-1,j-1));
         end
         if and(and(1<= i-1,i-1<=M),and(1<=j+1,j+1<= N))
-            minNum = min(minNum,minRGB(i-1,j+1));
+            minNum = min(minNum,minRGB(i-1,j-1));
         end
         if and(and(1<= i+1,i+1<=M),and(1<=j-1,j-1<= N))
-            minNum = min(minNum,minRGB(i+1,j-1));
+            minNum = min(minNum,minRGB(i-1,j-1));
         end
-        if and(1<= i+1,i+1<=M)
-            minNum = min(minNum,minRGB(i+1,j));
-        end
-        if and(1<= i-1,i-1<=M)
-            minNum = min(minNum,minRGB(i-1,j));
-        end
-        if and(1<= j+1,j+1<=N)
-            minNum = min(minNum,minRGB(i,j+1));
-        end
-        if and(1<= j-1,j-1<=N)
-            minNum = min(minNum,minRGB(i,j-1));
-        end
-        dark(i,j) = minNum;
+        if 
     end
 end
 dark = uint8(dark);
