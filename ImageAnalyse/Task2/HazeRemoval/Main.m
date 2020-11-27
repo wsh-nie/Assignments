@@ -2,7 +2,7 @@ clear;
 clc;
 
 % read image
-img = imread("test images/1.jpg");
+img = imread("test images/haze1.jpg");
 figure;
 subplot(321);imshow(img);title("Haze image");axis on;
 

@@ -1,6 +1,6 @@
 function T_hat = GetT_hat(img,airlight)
 %GETT_HAT Get T'
-%   此处显示详细说明
+%   锟剿达拷锟斤拷示锟斤拷细说锟斤拷
 omega = 0.95;
 imgB = double(img(:,:,1));
 imgG = double(img(:,:,2));
@@ -24,29 +24,12 @@ end
 for i = 1:M
     for j = 1:N
         minNum = minRGB(i,j);
-        if and(and(1<= i-1,i-1<=M),and(1<=j-1,j-1<= N))
-            minNum = min(minNum,minRGB(i-1,j-1));
-        end
-        if and(and(1<= i+1,i+1<=M),and(1<=j+1,j+1<= N))
-            minNum = min(minNum,minRGB(i+1,j+1));
-        end
-        if and(and(1<= i-1,i-1<=M),and(1<=j+1,j+1<= N))
-            minNum = min(minNum,minRGB(i-1,j+1));
-        end
-        if and(and(1<= i+1,i+1<=M),and(1<=j-1,j-1<= N))
-            minNum = min(minNum,minRGB(i+1,j-1));
-        end
-        if and(1<= i+1,i+1<=M)
-            minNum = min(minNum,minRGB(i+1,j));
-        end
-        if and(1<= i-1,i-1<=M)
-            minNum = min(minNum,minRGB(i-1,j));
-        end
-        if and(1<= j+1,j+1<=N)
-            minNum = min(minNum,minRGB(i,j+1));
-        end
-        if and(1<= j-1,j-1<=N)
-            minNum = min(minNum,minRGB(i,j-1));
+        for m = i-1:i+1
+            for n = j-1:j+1
+                if and(and(m>=1,m<=M),and(n>=1,n<=N))
+                    minNum = min(minNum,minRGB(m,n));
+                end
+            end
         end
         T_hat(i,j) = minNum;
     end

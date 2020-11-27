@@ -10,13 +10,13 @@ darkline = dark(:);
 imggray = rgb2gray(img);
 
 k = ceil(M*N * 0.001);
-[B,I] = maxk(darkline,k);
+[~,I] = maxk(darkline,k);
 highestintensity = 0;
 posx = 0;
 posy = 0;
 for i = 1:k
-    x = int8(I(i)/M);
-    y = int8(mod(I(i),N) + 1);
+    x = int32(mod(I(i),M))+1;
+    y = int32((I(i)-1)/M)+1;
     if imggray(x,y) > highestintensity
         posx = x;
         posy = y;
