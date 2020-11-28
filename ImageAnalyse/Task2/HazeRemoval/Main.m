@@ -7,5 +7,5 @@ subpath = dir(path);
 
 for i = 3:length(subpath)
     file =[path,subpath(i).name];
-    RemoveHaze(file);
+    RemoveHaze(file,subpath(i).name);
 end

@@ -27,6 +27,5 @@ for i = 1:M
         dark(i,j) = minNum;
     end
 end
-dark = uint8(dark);
 end
 
