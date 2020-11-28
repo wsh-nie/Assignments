@@ -45,7 +45,10 @@ $$
 
 导向滤波算法如下：
 
-![导向滤波算法](1.png)
+<div align="center">
+    <div><img src = "1.png" align ="center"/></div>
+    <span>导向滤波算法</span> 
+</div>
 
 在GuideFilter.m中实现
 ### 获得去雾图片
@@ -55,6 +58,38 @@ J(x) = \frac{I(x) - A}{\max(t(x),t_0)} + A.
 $$
 
 $t_0$值参考文章1设置为0.1。
+
+### 结果展示
+下面展示五张test images的去雾效果，图片保存在output文件夹中：
+
+<div align="center">
+    <div><img src = "output/1.jpg" align ="center"/></div>
+    <span>haze1.jpg去雾效果图</span> 
+</div>
+
+
+<div align="center">
+    <div><img src = "output/2.jpg" align ="center"/></div>
+    <span>haze2.jpg去雾效果图</span> 
+</div>
+
+
+<div align="center">
+    <div><img src = "output/3.jpg" align ="center"/></div>
+    <span>haze3.jpg去雾效果图</span> 
+</div>
+
+
+<div align="center">
+    <div><img src = "output/4.jpg" align ="center"/></div>
+    <span>haze4.jpg去雾效果图</span> 
+</div>
+
+
+<div align="center">
+    <div><img src = "output/5.jpg" align ="center"/></div>
+    <span>haze5.jpg去雾效果图</span> 
+</div>
 
 ## 收获
 
