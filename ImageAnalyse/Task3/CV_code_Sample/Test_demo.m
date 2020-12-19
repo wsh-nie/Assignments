@@ -9,7 +9,7 @@ clc;
 Img=imread('three.bmp');      % example that CV model works well
 % Img=imread('vessel.bmp');    % Warning: example image that CV model does NOT work well
 % Img=imread('twoCells.bmp');   % Warning: example image that CV model does NOT work well
-U=Img(:,:,1);
+U=Img(:,:,1);% 获得一个分量的值
 
 % get the size
 [nrow,ncol] =size(U);
@@ -17,7 +17,7 @@ U=Img(:,:,1);
 ic=nrow/2;
 jc=ncol/2;
 r=20;
-phi_0 = sdf2circle(nrow,ncol,ic,jc,r);
+phi_0 = sdf2circle(nrow,ncol,ic,jc,r); %初始化一个常量二维矩阵，sqrt((X-ic)^2 + (Y-jc)^2) -r
 figure; mesh(phi_0); title('Signed Distance Function')
 
 delta_t = 0.1;
@@ -38,7 +38,7 @@ hold on;
 plotLevelSet(phi,0,'r');
 
 numIter = 1;
-for k=1:50,
+for k=1:20,
     phi = evolution_cv(I, phi, mu, nu, lambda_1, lambda_2, delta_t, epsilon, numIter);   % update level set function
     if mod(k,2)==0
         pause(.5);

@@ -1,14 +1,6 @@
-function [K,delta_phi]=curvature(f);
-%   K=curvature(f);
-% K=div(Df/|Df|)
-%  =(fxx*fy^2+fyy*fx^2-2*fx*fy*fxy)/(fx^2+fy^2)^(3/2) 
-%   created on 04/26/2004
-%   author: Chunming Li
-%   email: li_chunming@hotmail.com
-%   Copyright (c) 2004-2006 by Chunming Li
-
-
-
+function delta_phi = Delta_phi(f)
+%DELTA_PHI 此处显示有关此函数的摘要
+%   此处显示详细说明
 [f_fx,f_fy]=forward_gradient(f);
 [f_bx,f_by]=backward_gradient(f);
 
@@ -31,11 +23,20 @@ n4y=f_by./mag4;
 nx=n1x+n2x+n3x+n4x; % fx
 ny=n1y+n2y+n3y+n4y; % fy
 
+delta_phi = phixx + phiyy;
+
 magn=sqrt(nx.^2+ny.^2);% magn = |Df|
+
+magn
+
 nx=nx./(magn+1e-10);% fx / |Df|
 ny=ny./(magn+1e-10);% fy / |Df|
 
+nx = nx .*(magn -1 + 1e-10);
+ny = ny .*(magn -1 + 1e-10);
+
+
 [nxx,nxy]=gradient(nx);
 [nyx,nyy]=gradient(ny);
+end
 
-K=nxx+nyy;

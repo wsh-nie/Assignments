@@ -28,7 +28,7 @@ for k = 1 : numIter
     g = Get_g(I);
     [Curv] = curvature(phi);% Curv = div(\frac{\nabla \phi}{|\nabla \phi|})
     % delta_phi = phixx + phiyy
-    delta_phi = Delta_phi(phi);% div((1-1/|D phi|) D phi)
+    delta_phi = Delta_phi(phi);% div((1-1/|D phi|) D p)
     Curv_g = g .* Curv;
     [C1,C2] = binaryfit(phi,I,epsilon);
     

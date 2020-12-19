@@ -7,8 +7,8 @@ function Delta_h = Delta(phi, epsilon)
 %   Copyright (c) 2004-2006 by Chunming Li
 
 %Delta_h=(epsilon/pi)./(epsilon^2+ phi.^2);
-[h,w] = size(phi);
-Delta_h = zeros(h,w);
+[w,h] = size(phi);
+Delta_h = zeros(w,h);
 for i = 1:h
     for j = 1:w
         if abs(phi(i,j)) > epsilon
