@@ -43,24 +43,24 @@ $$
 
 $$
 \begin{align}
-\because & \frac{\partial }{\partial x}[\phi_x h] = h_x \phi_x + h \phi_{xx}\\
-& \frac{\partial }{\partial y}[\phi_y h] = h_y \phi_y + h \phi_{yy}
+\because & \frac{\partial }{\partial x}[g \phi_x h] = g h_x \phi_x + g h \phi_{xx}\\
+& \frac{\partial }{\partial y}[g \phi_y h] = g h_y \phi_y + g h \phi_{yy}
 \end{align}
 $$
 
 $$
 \therefore 
 \begin{align} 
-\frac{\partial E(\phi + th)}{\partial t} |_{t->0} = \frac{1}{2} \delta(\phi) [\int_{\Omega}g(\frac{\partial}{\partial x}[\frac{\phi_x}{|\nabla \phi|} h]  + \frac{\partial}{\partial y}[\frac{\phi_y}{|\nabla \phi|} h])dxdy - \int_{\Omega} g(\frac{\partial}{\partial x}[\frac{\phi_x}{|\nabla \phi|}] h + h \frac{\partial}{\partial y}[\frac{\phi_y}{|\nabla \phi|}]) dxdy ]
+\frac{\partial E(\phi + th)}{\partial t} |_{t->0} = \frac{1}{2} \delta(\phi) [\int_{\Omega}(\frac{\partial}{\partial x}[g \frac{\phi_x}{|\nabla \phi|} h]  + \frac{\partial}{\partial y}[g \frac{\phi_y}{|\nabla \phi|} h])dxdy - \int_{\Omega} (\frac{\partial}{\partial x}[g \frac{\phi_x}{|\nabla \phi|}] h + h \frac{\partial}{\partial y}[g \frac{\phi_y}{|\nabla \phi|}]) dxdy ]
 \end{align}\\
 \text{According to Green Equation: }\oint_{\partial \Omega } Rdy + Sdx = \iint_{\Omega} \big( \frac{dS}{dy} - \frac{dR}{dx} \big) dxdy \\
-\therefore \int_{\Omega}g(\frac{\partial}{\partial x}[\frac{\phi_x}{|\nabla \phi|} h]  + \frac{\partial}{\partial y}[\frac{\phi_y}{|\nabla \phi|} h])dxdy = \oint_{\partial \Omega }h \Big( \frac{\phi_y}{|\nabla \phi|} - \frac{\phi_x}{|\nabla \phi|} \Big) dxdy = 0 \\
+\therefore \int_{\Omega}(\frac{\partial}{\partial x}[g \frac{\phi_x}{|\nabla \phi|} h]  + \frac{\partial}{\partial y}[g \frac{\phi_y}{|\nabla \phi|} h])dxdy = \oint_{\partial \Omega }h g\Big( \frac{\phi_y}{|\nabla \phi|} - \frac{\phi_x}{|\nabla \phi|} \Big) dxdy = 0 \\
 $$
 
 $$
 \therefore
 \begin{align}
-\frac{\partial E(\phi + th)}{\partial \phi}|_{t->0} & = -\frac{1}{2} \delta(\phi) \int_{\Omega}h \cdot g(\frac{\partial}{\partial x}[\frac{\phi_x}{|\nabla \phi|}] + \frac{\partial}{\partial y}[\frac{\phi_y}{|\nabla \phi|}]) dxdy \\
+\frac{\partial E(\phi + th)}{\partial \phi}|_{t->0} & = -\frac{1}{2} \delta(\phi) \int_{\Omega}h \cdot (\frac{\partial}{\partial x}[g\frac{\phi_x}{|\nabla \phi|}] + \frac{\partial}{\partial y}[g\frac{\phi_y}{|\nabla \phi|}]) dxdy \\
 & = -\frac{1}{2} \delta(\phi) \int_{\Omega} h \cdot \nabla[g \frac{\nabla \phi}{|\nabla \phi|}] dxdy
 \end{align} \\
 \text{When } E(\phi)\text{ reach the minimal,} \frac{E(\phi + th)}{\phi t}|_{t->0} = -\frac{1}{2} \delta(\phi) \int_{\Omega} h \cdot \nabla[g \frac{\nabla \phi}{|\nabla \phi|}] dxdy = 0 \\
@@ -70,7 +70,7 @@ $$
 再解$\mathcal A_g(\phi) = \int_\Omega gH(-\phi)dxdy$：
 $$
 同样记E(\phi) = \mathcal A_g(\phi) = \int_\Omega gH(-\phi) dx dy \\
-记F(\phi) = g H(-\phi)
+记F(\phi) = g H(-\phi)
 $$
 引入极小变量$t$和任意函数$h$，其中函数$h$满足：$h|_{\partial \Omega} =0 $
 $$

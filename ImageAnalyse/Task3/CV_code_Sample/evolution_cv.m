@@ -22,19 +22,28 @@ function phi = EVOLUTION_CV(I, phi0, mu, nu, lambda_1, lambda_2, delta_t, epsilo
 I = BoundMirrorExpand(I); % ¾µÏñ±ßÔµÑÓÍØ
 phi = BoundMirrorExpand(phi0);
 
+lambda = 5;
+g = Get_g(I);
+[gx,gy] = gradient(g);
+[phix,phiy] = gradient(phi);
+temp = sqrt(phix .^2 + phiy .^2 + 1e-10);
+phix = phix ./ temp;
+phiy = phiy ./ temp;
+
 for k = 1 : numIter
     phi = BoundMirrorEnsure(phi);
     delta_h = Delta(phi,epsilon);% Dirac function
-    g = Get_g(I);
-    [Curv] = curvature(phi);% Curv = div(\frac{\nabla \phi}{|\nabla \phi|})
+    Curv = curvature(phi);% Curv = div(\frac{\nabla \phi}{|\nabla \phi|})
+    Curv_g = phix .*gx + phiy .* gy + g .* Curv;% div(g * (Df/|Df|))
     % delta_phi = phixx + phiyy
-    delta_phi = Delta_phi(phi);% div((1-1/|D phi|) D phi)
-    Curv_g = g .* Curv;
-    [C1,C2] = binaryfit(phi,I,epsilon);
+    % delta_phi = Delta_phi(phi);% div((1-1/|D phi|) D phi)
+    %[C1,C2] = binaryfit(phi,I,epsilon);
     
     % updating the phi function
     %phi=phi+delta_t*delta_h.*(mu*Curv-nu-lambda_1*(I-C1).^2+lambda_2*(I-C2).^2);    
-    phi = phi + delta_t * (mu *(delta_phi) + lambda_1 * delta_h .* Curv_g + nu * g .* delta_h );
+    phi = phi + delta_t * (mu *(4 * del2(phi) - Curv) + lambda * delta_h .* Curv_g + nu * g .* delta_h );
+    
+
 end
 phi = BoundMirrorShrink(phi); % È¥µôÑÓÍØµÄ±ßÔµ
 
