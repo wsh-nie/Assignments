@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 	**/
 	int sockfd, fd, n, m, epollfd;
 	char line[MAXLINE + 1];
-	struct sockaddr_in6 servaddr, cliaddr;
+	struct sockaddr_in6 servaddr;
 	
 	struct epoll_event event,act[3];//epoll_event
 	int readynum, clientfd = 0;
@@ -29,10 +29,14 @@ int main(int argc, char **argv)
 		perror("socket error");
 	bzero(&servaddr, sizeof(servaddr));//init 0
 	servaddr.sin6_family = AF_INET6;
-	if(argc < 2)
-		perror("port error");
-	servaddr.sin6_port = htons(atoi(argv[1]));//set port
-	servaddr.sin6_addr = in6addr_any;
+	if(argc < 3){
+		perror("parameters error");
+	}else{
+		if(inet_pton(AF_INET6, argv[1], &servaddr.sin6_addr) < 0)
+			perror("IP Address error");
+		servaddr.sin6_port = htons(atoi(argv[2]));//set port
+		//servaddr.sin6_addr = in6addr_any;
+	}
 
 	if(bind(sockfd, (struct sockaddr*)&servaddr, sizeof(servaddr)) == -1)//bind()
 		perror("bind error");
@@ -74,14 +78,17 @@ int main(int argc, char **argv)
 				if(recv(clientfd,line,sizeof(line),0) != 0 ){//get message
 					printf("Receive message from client: %s\n",line);
 
-					if(strlen(line) == 3 && line[0]=='E' && line[1]=='N' && line[2]=='D'){
-						printf("End the connection!");
+					if(strcmp(line,"END") ==0){
+						printf("End the connection!\n");
 						close(clientfd);
 						close(sockfd);
 						exit(0);
 					}
 				}
 				else{// connected error
+					event.data.fd = clientfd;
+					if(epoll_ctl(epollfd,EPOLL_CTL_DEL, clientfd, &event) < 0)
+						perror("epoll_ctl 3 error");
 					close(clientfd);
 				}
 
