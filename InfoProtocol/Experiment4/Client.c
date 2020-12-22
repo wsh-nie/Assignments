@@ -66,7 +66,7 @@ int main(int argc, char **argv){
 				memset(line,0,sizeof(line));
 				if(recv(sockfd, line, sizeof(line),0) == 0){//link error
 					event.data.fd = sockfd;
-					if((epoll_ctl(epollfd, EPOLL_CTL_ADD, sockfd, &event)) < 0)
+					if((epoll_ctl(epollfd, EPOLL_CTL_DEL, sockfd, &event)) < 0)
 						perror("epoll_ctl error 3");
 					close(sockfd);
 					exit(0);
