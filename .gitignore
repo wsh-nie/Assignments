@@ -1,3 +1,10 @@
 # List of untracked files to ignore
 
 MultiMediaAnalyse/Task2/venv/
+
+out/
+
+*.class
+
+.idea/
+
