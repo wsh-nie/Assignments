@@ -29,9 +29,20 @@ public class Child {
 
     public void show(){
         System.out.print("Child Ptr : ");
+        boolean test = false;
         for(int i =0; i < length; i++){
             System.out.print(this.lst.get(i).pos + "," );
-            if(this.lst.get(i).bitmapNode != null) this.lst.get(i).bitmapNode.show();
+            if(!test && this.lst.get(i).pos == 1){
+                test = true;
+            }
+        }
+        if(test){
+            System.out.print("\nChild Ptr Linked: ");
+            for(int i =0; i < length; i++){
+                if(this.lst.get(i).bitmapNode != null) {
+                    System.out.print(this.lst.get(i).bitmapNode.mName+',');
+                }
+            }
         }
         System.out.println();
     }

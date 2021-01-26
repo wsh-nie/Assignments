@@ -6,7 +6,7 @@ import java.util.Queue;
 public class BitmapLinked {
     public BitmapNode root;
     public TrieNode result;
-    private List<BitmapNode> bitmapNodeList = new ArrayList<BitmapNode>();
+    private List<BitmapNode> bitmapNodeList = new ArrayList<>();
 
     private static class LeverNode{
         TrieNode trieNode;
@@ -18,11 +18,12 @@ public class BitmapLinked {
     }
 
     public BitmapLinked(TrieLinked trieLinked,int stride){
-        this.root = new BitmapNode(stride,trieLinked.root);
+        this.root = new BitmapNode(stride,trieLinked.root,"root");
         this.bitmapNodeList.add(this.root);
         this.result = trieLinked.root;
         Queue<BitmapNode> queueBitmapNode = new LinkedList<>();
         queueBitmapNode.add(this.root);
+        int label = 1;
         while(!queueBitmapNode.isEmpty()){
             BitmapNode point = queueBitmapNode.poll();
             Queue<LeverNode> queueLevelNode = new LinkedList<>();
@@ -41,13 +42,13 @@ public class BitmapLinked {
                     int childIdx = idx - (int)Math.pow(2,stride-1);
 
                     if(tmpTrieNode.lChild != null){
-                        BitmapNode newBitmapNode = new BitmapNode(stride,tmpTrieNode.lChild);
+                        BitmapNode newBitmapNode = new BitmapNode(stride,tmpTrieNode.lChild,(String)("node"+(label++)));
                         point.mChild.setLink(childIdx*2,1,newBitmapNode);
                         queueBitmapNode.add(newBitmapNode);
                         this.bitmapNodeList.add(newBitmapNode);
                     }
                     if(tmpTrieNode.rChild != null){
-                        BitmapNode newBitmapNode = new BitmapNode(stride,tmpTrieNode.rChild);
+                        BitmapNode newBitmapNode = new BitmapNode(stride,tmpTrieNode.rChild,(String)("node"+(label++)));
                         point.mChild.setLink(childIdx*2+1,1,newBitmapNode);
                         queueBitmapNode.add(newBitmapNode);
                         this.bitmapNodeList.add(newBitmapNode);
@@ -65,7 +66,6 @@ public class BitmapLinked {
 
     public void show(){
         for(int i = 0; i < this.bitmapNodeList.size(); i++){
-            System.out.println("Node " + (i+1) + " : ");
             this.bitmapNodeList.get(i).show();
         }
     }

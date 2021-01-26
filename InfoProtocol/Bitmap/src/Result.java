@@ -29,7 +29,7 @@ public class Result {
         System.out.print("Result Ptr : ");
         for(int i =0; i < length; i++){
             System.out.print(this.lst.get(i).pos + "," );
-            if(this.lst.get(i).trieNode != null) this.lst.get(i).trieNode.show();
+            //if(this.lst.get(i).trieNode != null) this.lst.get(i).trieNode.show();
         }
         System.out.println();
     }
